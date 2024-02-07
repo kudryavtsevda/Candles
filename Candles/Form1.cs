@@ -47,6 +47,38 @@ namespace Candles
                 candles.Add(candle);
             }
 
+            // calculate SMA and display it as a scatter plot
+            int[] windowSizes = { 3, 8, 20 };
+            foreach (int windowSize in windowSizes)
+            {
+                ScottPlot.Finance.SimpleMovingAverage sma = new(candles, windowSize);
+                var sp = formsPlot1.Plot.Add.Scatter(sma.Dates, sma.Means);
+                sp.Label = $"SMA {windowSize}";
+                sp.MarkerSize = 0;
+                sp.LineWidth = 3;
+                sp.Color = Colors.Navy.WithAlpha(1 - windowSize / 30.0);
+            }
+
+            // calculate Bollinger Bands
+            ScottPlot.Finance.BollingerBands bb = new(candles, 20);
+
+            // display center line (mean) as a solid line
+            var sp1 = formsPlot1.Plot.Add.Scatter(bb.Dates, bb.Means);
+            sp1.MarkerSize = 0;
+            sp1.Color = Colors.Navy;
+
+            // display upper bands (positive variance) as a dashed line
+            var sp2 = formsPlot1.Plot.Add.Scatter(bb.Dates, bb.UpperValues);
+            sp2.MarkerSize = 0;
+            sp2.Color = Colors.Navy;
+            sp2.LinePattern = LinePattern.Dotted;
+
+            // display lower bands (positive variance) as a dashed line
+            var sp3 = formsPlot1.Plot.Add.Scatter(bb.Dates, bb.LowerValues);
+            sp3.MarkerSize = 0;
+            sp3.Color = Colors.Navy;
+            sp3.LinePattern = LinePattern.Dotted;
+
             formsPlot1.Plot.Add.Candlestick(candles);
             formsPlot1.Plot.Axes.DateTimeTicksBottom();
 
