@@ -2,6 +2,7 @@ using Newtonsoft.Json;
 using RestSharp;
 using ScottPlot;
 using System.Diagnostics;
+using System.Globalization;
 
 namespace Candles
 {
@@ -173,19 +174,18 @@ namespace Candles
         public decimal LowPrice { get; set; }
         public decimal ClosePrice { get; set; }
         public decimal Volume { get; set; }
-        public decimal Turnover { get; set; }
 
         public MarketData(List<object> data)
         {
             if (data != null && data.Count >= 7)
             {
-                Timestamp = Convert.ToInt64(data[0]);
-                OpenPrice = Convert.ToDecimal(data[1]);
-                HighPrice = Convert.ToDecimal(data[2]);
-                LowPrice = Convert.ToDecimal(data[3]);
-                ClosePrice = Convert.ToDecimal(data[4]);
-                Volume = Convert.ToDecimal(data[5]);
-                Turnover = Convert.ToDecimal(data[6]);
+                var culture = new CultureInfo("en-US");
+                Timestamp = Convert.ToInt64(data[0], culture);
+                OpenPrice = Convert.ToDecimal(data[1], culture);
+                HighPrice = Convert.ToDecimal(data[2], culture);
+                LowPrice = Convert.ToDecimal(data[3], culture);
+                ClosePrice = Convert.ToDecimal(data[4], culture);
+                Volume = Convert.ToDecimal(data[5], culture);
             }
         }
     }
